@@ -2,10 +2,11 @@ import numpy
 
 
 class Game:
-    def __init__(self, size=4):
+    def __init__(self, size=5):
         self.size = size
+        self.state = numpy.random.RandomState(0)
         self.board = numpy.zeros((self.size, self.size), dtype=int)
-        self.board[numpy.random.randint(0, self.size), numpy.random.randint(0, self.size)] = 2
+        self.board[self.state.randint(0, self.size), self.state.randint(0, self.size)] = 2
         self.score = 0
 
     def play_move(self, side):
@@ -33,14 +34,14 @@ class Game:
                     self.board[x, y] = 0
 
         if has_played:
-            a = numpy.random.randint(0, self.size ** 2)
+            a = self.state.randint(0, self.size ** 2)
             k = 0
             while self.board[a % self.size, a // self.size] != 0 and k < self.size * 3:
                 a = (a + 1) % self.size ** 2
                 k += 1
 
             if self.board[a % self.size, a // self.size] == 0:
-                self.board[a % self.size, a // self.size] = 2 if numpy.random.rand() > 0.2 else 4
-            else:
-                print("Game Over")
+                self.board[a % self.size, a // self.size] = 2 if self.state.rand() > 0.2 else 4
+                # else:
+                #   print("Game Over")
         return has_played

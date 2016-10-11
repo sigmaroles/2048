@@ -4,7 +4,7 @@ from tkinter import font
 
 
 class Renderer:
-    def __init__(self, update_delegate, size=4):
+    def __init__(self, update_delegate, size=5):
         self.update_delegate = update_delegate
         self.click_delegate = []
 
