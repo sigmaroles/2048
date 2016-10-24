@@ -4,8 +4,8 @@ from tkinter import font
 
 
 class Renderer:
-    def __init__(self, update_delegate, size=5):
-        self.update_delegate = update_delegate
+    def __init__(self, update_board, size=5):
+        self.update_board = update_board
         self.click_delegate = []
 
         # Initialize Tk and Canvas
@@ -22,18 +22,20 @@ class Renderer:
         self.canvas.config(width=s * self.size, height=s * self.size)
 
         helv36 = font.Font(family='Helvetica', size=int(s / 4), weight='bold')
-        for i in range(self.size):
-            for j in range(self.size):
-                r = self.canvas.create_rectangle(i * s, j * s, (i + 1) * s, (j + 1) * s, outline='', activefill='grey')
-                t = self.canvas.create_text((i + 0.5) * s, (j + 0.5) * s, font=helv36)
-                self.rectangles[i, j] = r
-                self.texts[i, j] = t
+        for j in range(self.size):
+            for i in range(self.size):
+                tag = str(i) + " " + str(j)
+                rect = self.canvas.create_rectangle(i * s, j * s, (i + 1) * s, (j + 1) * s, outline='', tag=tag)
+                text = self.canvas.create_text((i + 0.5) * s, (j + 0.5) * s, font=helv36, tag=tag)
+                self.rectangles[i, j] = rect
+                self.texts[i, j] = text
 
+    def start(self):
         self.mainloop()
         self.window.mainloop()
 
     def mainloop(self):
-        t = self.update_delegate()
+        t = self.update_board()
         for i in range(self.size):
             for j in range(self.size):
                 if t[i, j] == 0:
@@ -63,6 +65,6 @@ class Renderer:
                 else:
                     c = '#3c3a32'
 
-                self.canvas.itemconfig(int(self.rectangles[i, j]), fill=c)
+                self.canvas.itemconfig(int(self.rectangles[i, j]), fill=c, activefill='grey')
                 self.canvas.itemconfig(int(self.texts[i, j]), text=str(t[i, j]))
         self.canvas.after(1, self.mainloop)

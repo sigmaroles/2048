@@ -1,47 +1,44 @@
 import numpy
+from typing import Type
 
 
-class Game:
-    def __init__(self, size=5):
-        self.size = size
-        self.state = numpy.random.RandomState(0)
-        self.board = numpy.zeros((self.size, self.size), dtype=int)
-        self.board[self.state.randint(0, self.size), self.state.randint(0, self.size)] = 2
-        self.score = 0
+def init_board(size: int, state: Type[numpy.random.RandomState]) -> numpy.ndarray:
+    """
+    Init board
+    :param size: size of the board
+    :param state: numpy random state
+    :return:
+    """
+    board = numpy.zeros((size, size), dtype=int)
+    board[state.randint(0, size), state.randint(0, size)] = 2
+    return board
 
-    def play_move(self, side):
-        """
-        Play a move
-        :param side: 1: right, 2: up, -1: left, -2: down
-        :return: true if possible move
-        """
-        a = range(self.size, -1, -1) if side < 0 else range(self.size)
-        has_played = False
-        for i in a:
-            for j in a:
-                if abs(side) == 1:
-                    x = i - side
-                    y = j
-                else:
-                    x = i
-                    y = j - int(side / abs(side))
 
-                if self.size > x > -1 < y < self.size and \
-                        (self.board[x, y] == self.board[i, j] != 0 or self.board[i, j] == 0):
-                    has_played = True
-                    self.score += self.board[x, y]
-                    self.board[i, j] += self.board[x, y]
-                    self.board[x, y] = 0
+def play_move(board: numpy.ndarray, side: int, state: Type[numpy.random.RandomState]) -> int:
+    """
+    Play a move
+    :param board: board
+    :param side: side (0, 1, 2, 3)
+    :param state: numpy random state
+    :return score
+    """
+    score = 0
+    size = board.shape[0]
+    direction = side % 2  # 0 down, 1 right
+    sens = (side % 2 == 0) * (side - 1) + (side % 2 == 1) * (side - 2)  # -1 left, 1 right
+    for i in (range(size - 1, -1, -1) if direction == 0 and sens == -1 else range(size)):
+        for j in (range(size - 1, -1, -1) if direction == 1 and sens == -1 else range(size)):
+            a = (i, j)
+            if board[a] != 0:
+                b = (i + (direction == 0) * sens, j + (direction == 1) * sens)
+                if 0 <= b[0] < size > b[1] >= 0 and (board[a] == board[b] or board[b] == 0):
+                    board[b] += board[a]
+                    score += board[a]
+                    board[a] = 0
+    if score != 0:
+        x = state.randint(0, size ** 2)
+        while board[x // size, x % size] != 0:
+            x = (x + 1) % size ** 2
 
-        if has_played:
-            a = self.state.randint(0, self.size ** 2)
-            k = 0
-            while self.board[a % self.size, a // self.size] != 0 and k < self.size * 3:
-                a = (a + 1) % self.size ** 2
-                k += 1
-
-            if self.board[a % self.size, a // self.size] == 0:
-                self.board[a % self.size, a // self.size] = 2 if self.state.rand() > 0.2 else 4
-                # else:
-                #   print("Game Over")
-        return has_played
+        board[x // size, x % size] = 2 + 2 * (state.rand() > 0.8)
+    return score
