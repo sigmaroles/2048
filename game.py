@@ -2,7 +2,7 @@ import numpy
 from typing import Type
 
 
-def init_board(size: int, state: Type[numpy.random.RandomState]) -> numpy.ndarray:
+def init_board(size: int = 4, state: Type[numpy.random.RandomState] = numpy.random.RandomState()) -> numpy.ndarray:
     """
     Init board
     :param size: size of the board
@@ -14,12 +14,12 @@ def init_board(size: int, state: Type[numpy.random.RandomState]) -> numpy.ndarra
     return board
 
 
-def play_move(board: numpy.ndarray, side: int, state: Type[numpy.random.RandomState]) -> int:
+def play_move(board: numpy.ndarray, side: int, random_state: Type[numpy.random.RandomState]) -> int:
     """
     Play a move
     :param board: board
     :param side: side (0, 1, 2, 3)
-    :param state: numpy random state
+    :param random_state: numpy random state
     :return score
     """
     score = 0
@@ -36,9 +36,9 @@ def play_move(board: numpy.ndarray, side: int, state: Type[numpy.random.RandomSt
                     score += board[a]
                     board[a] = 0
     if score != 0:
-        x = state.randint(0, size ** 2)
+        x = random_state.randint(0, size ** 2)
         while board[x // size, x % size] != 0:
             x = (x + 1) % size ** 2
 
-        board[x // size, x % size] = 2 + 2 * (state.rand() > 0.8)
+        board[x // size, x % size] = 2 + 2 * (random_state.rand() > 0.8)
     return score

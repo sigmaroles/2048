@@ -5,11 +5,11 @@ from renderer import Renderer
 
 
 class GameHandler:
-    def __init__(self, size=5):
+    def __init__(self, size=4, player=None):
         self.renderer = Renderer(self.update, size=size)
         self.state = numpy.random.RandomState()
         self.board = game.init_board(size, self.state)
-        self.player = HumanPlayer(self.renderer)
+        self.player = HumanPlayer(self.renderer) if player is None else player
         self.renderer.start()
 
     def update(self):
