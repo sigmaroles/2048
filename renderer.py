@@ -22,11 +22,12 @@ class Renderer:
         self.canvas.config(width=s * self.size, height=s * self.size)
 
         helv36 = font.Font(family='Helvetica', size=int(s / 4), weight='bold')
-        for j in range(self.size):
-            for i in range(self.size):
+        for i in range(self.size):
+            for j in range(self.size):
                 tag = str(i) + " " + str(j)
-                rect = self.canvas.create_rectangle(i * s, j * s, (i + 1) * s, (j + 1) * s, outline='', tag=tag)
-                text = self.canvas.create_text((i + 0.5) * s, (j + 0.5) * s, font=helv36, tag=tag)
+                x, y = j, i
+                rect = self.canvas.create_rectangle(x * s, y * s, (x + 1) * s, (y + 1) * s, outline='', tag=tag)
+                text = self.canvas.create_text((x + 0.5) * s, (y + 0.5) * s, font=helv36, tag=tag)
                 self.rectangles[i, j] = rect
                 self.texts[i, j] = text
 
