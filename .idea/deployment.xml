@@ -5,7 +5,7 @@
       <paths name="Jupyter">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/admin/PycharmProjects/2048" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/notebooks/PycharmProjects/2048" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

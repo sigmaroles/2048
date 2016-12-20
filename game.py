@@ -1,8 +1,7 @@
 import numpy
-from typing import Type
 
 
-def init_board(size: int, state: Type[numpy.random.RandomState]) -> numpy.ndarray:
+def init_board(size: int, state: numpy.random.RandomState) -> numpy.ndarray:
     """
     Init board
     :param size: size of the board
@@ -14,7 +13,7 @@ def init_board(size: int, state: Type[numpy.random.RandomState]) -> numpy.ndarra
     return board
 
 
-def play_move(board: numpy.ndarray, side: int, state: Type[numpy.random.RandomState]) -> int:
+def play_move(board: numpy.ndarray, side: int, state: numpy.random.RandomState) -> int:
     """
     Play a move
     :param board: board
@@ -43,3 +42,11 @@ def play_move(board: numpy.ndarray, side: int, state: Type[numpy.random.RandomSt
 
         board[x // size, x % size] = 2 + 2 * (state.rand() > 0.8)
     return score
+
+
+def get_reward(board: numpy.ndarray, score: int):
+    reward = numpy.count_nonzero(board == 0)
+    if score == 0:
+        return -100
+    else:
+        return reward
