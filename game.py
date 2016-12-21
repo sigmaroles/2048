@@ -47,6 +47,6 @@ def play_move(board: numpy.ndarray, side: int, state: numpy.random.RandomState) 
 def get_reward(board: numpy.ndarray, score: int):
     reward = numpy.count_nonzero(board == 0)
     if score == 0:
-        return -100
+        return -10
     else:
         return reward
