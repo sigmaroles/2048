@@ -11,7 +11,7 @@ class HumanPlayer:
         self.renderer.canvas.bind("<Up>", lambda event: self.change_side(2))
         self.renderer.canvas.bind("<Left>", lambda event: self.change_side(3))
 
-    def play_move(self, board: numpy.ndarray, state: numpy.random.RandomState) -> int:
+    def play_move(self, board, state):
         if self.side is None:
             return 2
         else:
